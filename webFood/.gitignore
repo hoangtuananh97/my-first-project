@@ -1,4 +1,9 @@
 *.pyc
-db.sqlite3
+*sqlite3
 env/
-webFood/__pycache__
+venv/
+.idea/
+__pycache__
+*.pyc
+*.pyo
+../.idea/
