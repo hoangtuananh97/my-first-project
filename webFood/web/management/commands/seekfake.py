@@ -1,5 +1,4 @@
 from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX, UNUSABLE_PASSWORD_SUFFIX_LENGTH, get_hasher
-from django.contrib.auth.models import User
 from django.core.management import BaseCommand
 from django.utils.crypto import get_random_string
 from faker import Faker
@@ -7,6 +6,7 @@ import random as rd
 
 from faker.generator import random
 
+from users.models import User
 from web.models import Good, Consumer, BillDetail, Bill, StaffPerformBill
 
 fake = Faker('en_US')

@@ -1,9 +1,7 @@
-
-from django.contrib.auth.models import User
 from django.db import models
 
-
 # Create your models here.
+from users.models import User
 
 
 class Consumer(models.Model):
@@ -48,9 +46,15 @@ class Bill(models.Model):
 
 
 class BillDetail(models.Model):
-    consumer = models.ForeignKey(Consumer, null=True, blank=True, on_delete=models.DO_NOTHING)
-    good = models.ForeignKey(Good, null=True, blank=True, on_delete=models.DO_NOTHING)
-    bill = models.ForeignKey(Bill, null=True, blank=True, on_delete=models.DO_NOTHING)
+    consumer = models.ForeignKey(Consumer, null=True, blank=True,
+                                 on_delete=models.DO_NOTHING,
+                                 related_name='bd_relate_consumer')
+    good = models.ForeignKey(Good, null=True, blank=True,
+                             on_delete=models.DO_NOTHING,
+                             related_name='bd_relate_good')
+    bill = models.ForeignKey(Bill, null=True, blank=True,
+                             on_delete=models.DO_NOTHING,
+                             related_name='bd_relate_bill')
     created_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True)
     is_deleted = models.BooleanField(null=True, blank=True, default=False)
@@ -61,8 +65,10 @@ class BillDetail(models.Model):
 
 
 class StaffPerformBill(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING)
-    bill = models.ForeignKey(Bill, null=True, blank=True, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING,
+                             related_name='staff_relate_user')
+    bill = models.ForeignKey(Bill, null=True, blank=True, on_delete=models.DO_NOTHING,
+                             related_name='staff_relate_bill')
     created_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True)
     is_deleted = models.BooleanField(null=True, blank=True, default=False)
@@ -70,5 +76,3 @@ class StaffPerformBill(models.Model):
     class Meta:
         db_table = 'tb_staff_perform_bill'
         verbose_name = 'Staff Perform Bill'
-
-
