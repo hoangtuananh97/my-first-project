@@ -1,4 +1,7 @@
 from djoser import utils
+from djoser.compat import get_user_email
+from djoser.conf import settings
+from djoser.serializers import SendEmailResetSerializer
 from rest_framework import generics, status, exceptions
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
@@ -61,3 +64,20 @@ class Logout(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return ErrorJsonRender.BadRequestException
+
+
+class SendEmailRestPassword(generics.GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = SendEmailResetSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.get_user()
+
+        if user:
+            context = {"user": user}
+            to = [get_user_email(user)]
+            settings.EMAIL.password_reset(self.request, context).send(to)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

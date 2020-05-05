@@ -8,7 +8,7 @@ from web.models import Good
 class GoodSearch(ListAPIView):
     serializer_class = ListGoodSerializer
     # permission_classes = (AllowAny,)
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Good.objects.all()

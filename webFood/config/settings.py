@@ -109,12 +109,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 9,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'utils.CustomValidatePassword.CustomValidatePassword',
+        'OPTIONS': {
+            'min_length': 9,
+        }
     },
 ]
 
@@ -216,7 +225,7 @@ AUTH_USER_MODEL = 'users.User'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAdminUser',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -238,7 +247,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'utils.CustomPagination.CustomPagination',
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -280,8 +289,11 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'users.api.serializers.UserRegistrationSerializer',
-        "activation": "djoser.email.ActivationEmail",
     },
+    "EMAIL": {
+        "activation": "utils.email.CustomActionEmail",
+        "password_reset": "djoser.email.PasswordResetEmail",
+    }
 
 }
 

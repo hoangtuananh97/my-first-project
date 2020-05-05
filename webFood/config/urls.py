@@ -16,16 +16,19 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from djoser.views import UserViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from users.api.views import UserActivationView, Logout
+from users.api.views import UserActivationView, Logout, SendEmailRestPassword
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('web.urls')),
     path('api/v1/', include('users.api.urls')),
     path('api/v1/auth/signin', TokenObtainPairView.as_view(), name='signin'),
-    url(r'^auth/', include('djoser.urls')),
+    # url(r'^auth/', include('djoser.urls')),
     url(r'^auth/users/activate/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserActivationView.as_view()),
+    url(r'^auth/users/reset_password/$', SendEmailRestPassword.as_view()),
+    url(r'^auth/users/reset_password_confirm/$', SendEmailRestPassword.as_view()),
     url(r'^auth/users/logout$', Logout.as_view()),
 ]
